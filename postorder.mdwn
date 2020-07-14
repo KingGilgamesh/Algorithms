@@ -1,0 +1,80 @@
+###二叉树后序遍历
+访问了某个node，需要pop，如果继续访问右结点，则当前父节点仍然在堆栈中，用peek
++ 递归
+```Java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> output = new LinkedList<>();
+        
+        if(root == null)return output;
+
+        TreeNode node = root;
+        postorderBuilder(root, output);
+        return output;
+
+    }
+
+    public void postorderBuilder(TreeNode root, List<Integer> output){
+        if(root != null){
+            postorderBuilder(root.left, output);
+            postorderBuilder(root.right, output);
+            output.add(root.val);
+        }
+    }
+}
+```
++ 迭代
+```Java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> output = new LinkedList<>();
+        Stack<TreeNode> stack = new Stack<>();
+
+        //extreme condition
+        if(root == null) return output;
+
+        TreeNode node = root;
+        TreeNode pre = null;
+
+        //left, right, root
+        while(node != null || !stack.isEmpty()){
+            //access left node
+            while(node != null){
+                stack.push(node);
+                node = node.left;
+            }
+            //access right node first
+            node = stack.peek();//not stored yet
+            //access right node only when it has not been visited and not null
+            if(node.right == null || node.right == pre){
+                output.add(node.val);
+                stack.pop();
+                pre = node;
+                node = null;
+            }
+            else{
+                node = node.right;
+            }
+        }
+        return output;
+    }
+}
+```

@@ -1,0 +1,62 @@
+###二叉树中序遍历
++ 递归
+```Java
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> output = new LinkedList<>();
+
+        //extreme condition
+        if(root == null)return output;
+
+        TreeNode node = root;
+
+        inorderRecursive(node, output);
+        return output;
+
+    }
+
+    public void inorderRecursive(TreeNode root, List<Integer> output){
+        if(root != null){
+            inorderRecursive(root.left, output);
+            output.add(root.val);
+            inorderRecursive(root.right, output);
+        }
+    }
+}
+```
++ 迭代
+```Java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> output = new LinkedList<>();//output
+        Stack<TreeNode> stack = new Stack<>();//store visited nodes
+
+        //extreme condition
+        if(root == null)return output;
+
+        TreeNode node = root;
+
+        //left, root, right
+        while(node != null || !stack.isEmpty()){
+            while(node != null){
+                stack.push(node);
+                node = node.left;
+            }//current node is null
+            node = stack.pop();
+            output.add(node.val);
+            node = node.right;
+        }
+        return output;
+
+    }
+}
+```

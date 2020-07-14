@@ -1,0 +1,72 @@
+###二叉树前序遍历(preorder traversal)
++ 递归
+```Java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> output = new LinkedList<>();
+
+        //extreme condition
+        if(root == null)return output;
+
+        TreeNode node = root;
+        preorderBuilder(node, output);
+        return output;
+
+    }
+
+    public void preorderBuilder(TreeNode root, List<Integer> output){
+        if(root != null){
+            output.add(root.val);
+            preorderBuilder(root.left, output);
+            preorderBuilder(root.right, output);
+        }
+    }
+}
+```
+
++ 迭代
+```Java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> output = new LinkedList<>();
+        Stack<TreeNode> stack = new Stack<>();
+
+
+        //extreme condition
+        if(root == null)return output;
+
+        TreeNode node = root;
+
+        stack.push(node);
+        
+        //root, left, right
+        while(!stack.isEmpty()){
+            // root value first
+            node = stack.pop();
+            output.add(node.val);
+            if(node.right != null)stack.push(node.right);//push right child for later access
+            if(node.left != null) stack.push(node.left);//push left child next for earlier access
+        }
+        return output;
+    }
+
+}
+```
