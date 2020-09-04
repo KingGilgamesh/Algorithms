@@ -1,0 +1,78 @@
+原题
+https://www.nowcoder.com/question/next?pid=21283868&qid=830861&tid=36972882
+
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+    static int count = 0;
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        //第一行一个数n
+        int n = input.nextInt();
+
+        int a = (int)Math.pow(2, n);
+
+        //第二行2^n个数
+        int[] initSeq = new int[a];
+        for (int i = 0; i < Math.pow(2, n); i++){
+            initSeq[i] = input.nextInt();
+        }
+
+        //第三行一个数m
+        int m = input.nextInt();
+
+        //第四行m个数表示
+        int[] qi = new int[m];
+        for (int i = 0; i < m; i++)qi[i] = input.nextInt();
+
+        //翻转,mergeSort
+        for (int i = 0; i < m; i++){
+            transverse(initSeq, qi[i]);
+            countReverse(initSeq, 0, initSeq.length - 1);
+            System.out.println(count);
+            count = 0;
+        }
+
+    }
+
+    //翻转
+    public static void transverse(int[] initSeq, int qi){
+        qi = (int)Math.pow(2, qi);
+        for (int i = 0; i < initSeq.length; i = i + qi){
+            for (int j = 0; j < qi / 2; j++){
+                int tmp = initSeq[j + i];
+                initSeq[j + i] = initSeq[i + qi - j - 1];
+                initSeq[i + qi - j - 1] = tmp;
+            }
+        }
+    }
+
+    //逆序对
+    public static void countReverse(int[] initSeq, int start, int end){
+        if(start >= end)return;
+        int midPoint = (start + end) / 2;
+
+        int[] tmpArray = new int[end - start + 1];
+
+        countReverse(initSeq, start, midPoint);
+        countReverse(initSeq, midPoint + 1, end);
+
+        int p = midPoint, q = end, index = tmpArray.length - 1;
+        while(p >= start && q >= midPoint + 1){
+            if (initSeq[p] > initSeq[q]){
+                tmpArray[index--] = initSeq[p--];
+                count += q - midPoint;
+            }
+            else
+                tmpArray[index--] = initSeq[q--];
+        }
+
+        while(p >= start)tmpArray[index--] = initSeq[p--];
+        while(q >= midPoint + 1)tmpArray[index--] = initSeq[q--];
+
+//        System.arraycopy(tmpArray, 0, initSeq, start, end - start + 1);
+    }
+}
